@@ -446,18 +446,41 @@ En cada submenú, la opción **0** vuelve al menú principal. Dentro de una oper
 
 # 12. Capturas de Pantalla
 
-> Sección para completar por el autor. Capturas sugeridas:
+Evidencia del funcionamiento de la aplicación. Las imágenes están en `docs/screenshots/`.
 
-1. `[CAPTURA: menú principal con el recuadro]`
-2. `[CAPTURA: listado de estudiantes en tabla alineada]`
-3. `[CAPTURA: registro de un estudiante con su acudiente (mensaje de éxito)]`
-4. `[CAPTURA: entrada inválida con mensaje de error y reintento]`
-5. `[CAPTURA: registro de nota y promedios por materia]`
-6. `[CAPTURA: registro de un pago con la ruta de la factura generada]`
-7. `[CAPTURA: factura PDF abierta mostrando CUFE, QR y totales]`
-8. `[CAPTURA: préstamo y devolución de un recurso]`
-9. `[CAPTURA: reporte de morosos o de inasistencias preocupantes]`
-10. `[CAPTURA: últimas 20 líneas de error_log.txt desde el menú]`
+### 1. Menú principal con el recuadro
+![Menú principal](docs/screenshots/01_menu_principal.png)
+
+### 2. Listado de estudiantes en tabla alineada
+![Listado de estudiantes](docs/screenshots/02_listado_estudiantes.png)
+
+### 3. Registro de un estudiante con su acudiente
+![Registro de estudiante](docs/screenshots/03_registro_estudiante.png)
+
+### 4. Entrada inválida con mensaje de error y reintento
+![Entrada inválida](docs/screenshots/04_entrada_invalida.png)
+
+### 5. Registro de nota y promedios por materia
+![Registro de nota](docs/screenshots/05_nota_y_promedios.png)
+
+![Historial académico y promedio por materia](docs/screenshots/05b_promedios.png)
+
+### 6. Registro de un pago con la ruta de la factura generada
+![Registro de pago](docs/screenshots/06_registro_pago.png)
+
+### 7. Factura electrónica PDF con CUFE, código QR y totales
+![Factura PDF](docs/screenshots/07_factura_pdf.png)
+
+### 8. Préstamo y devolución de un recurso
+![Préstamo de un recurso](docs/screenshots/08a_prestamo.png)
+
+![Devolución de un recurso](docs/screenshots/08_prestamo_devolucion.png)
+
+### 9. Reporte de estudiantes morosos
+![Reporte de morosos](docs/screenshots/09_reporte_morosos.png)
+
+### 10. Últimas 20 líneas de error_log.txt desde el menú
+![Log de errores](docs/screenshots/10_log_errores.png)
 
 ---
 

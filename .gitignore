@@ -36,3 +36,9 @@ build/
 
 ### Mac OS ###
 .DS_Store
+### Little Horizons ERP ###
+src/main/resources/config.properties
+config.properties
+error_log.txt
+referencia/
+invoices/*.pdf

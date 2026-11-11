@@ -36,12 +36,13 @@ public abstract class BaseView {
 
     /**
      * Runs one menu action and turns any expected error into a clear message.
-     * Database errors were already logged by the DAO.
+     * The DAO already logged database errors with their stack trace.
      */
     protected void runAction(Runnable action) {
         try {
             action.run();
         } catch (OperationCancelledException e) {
+            AppLogger.getInstance().info(getClass().getSimpleName(), e.getMessage());
             printer.printInfo("Operación cancelada. Volviendo al menú.");
         } catch (BusinessRuleException e) {
             AppLogger.getInstance().warning(getClass().getSimpleName(), e.getMessage());
@@ -50,6 +51,7 @@ public abstract class BaseView {
             AppLogger.getInstance().warning(getClass().getSimpleName(), "Invalid data: " + e.getMessage());
             printer.printError(e.getMessage());
         } catch (DataAccessException e) {
+            AppLogger.getInstance().warning(getClass().getSimpleName(), "Shown to user: " + e.getMessage());
             printer.printError(e.getMessage());
         }
         input.waitForEnter();
@@ -65,7 +67,8 @@ public abstract class BaseView {
 
     /** Reads an id; 0 cancels the operation. */
     protected int readId(String entityName) {
-        int id = input.readInt("ID del " + entityName + " (0 para cancelar): ", 0, Integer.MAX_VALUE);
+        int id = input.readValidated("ID del " + entityName + " (0 para cancelar): ", text -> Integer.parseInt(text),
+                number -> number >= 0, "Ingrese un ID numérico, o 0 para cancelar.");
         if (id == CANCEL_OPTION) {
             throw new OperationCancelledException();
         }

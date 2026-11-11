@@ -224,7 +224,8 @@ public class ExtracurricularView extends BaseView {
     }
 
     private Integer readSupervisor() {
-        int teacherId = input.readInt("ID del profesor encargado (0 = sin encargado): ", 0, Integer.MAX_VALUE);
+        int teacherId = input.readValidated("ID del profesor encargado (0 = sin encargado): ",
+                text -> Integer.parseInt(text), number -> number >= 0, "Ingrese un ID numérico, o 0 si no tiene encargado.");
         return teacherId == NO_SUPERVISOR ? null : teacherId;
     }
 }

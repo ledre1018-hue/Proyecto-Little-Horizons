@@ -55,6 +55,13 @@ public class ConsoleInput {
                 "Ingrese un número entero entre " + min + " y " + max + ".");
     }
 
+    public int readIntOrDefault(String prompt, int min, int max, int defaultValue) {
+        return readValidated(prompt + " [" + defaultValue + "]: ",
+                text -> text.isEmpty() ? defaultValue : Integer.parseInt(text),
+                number -> number >= min && number <= max,
+                "Ingrese un número entero entre " + min + " y " + max + ".");
+    }
+
     public int readPositiveInt(String prompt) {
         return readValidated(prompt, text -> Integer.parseInt(text), number -> number > 0,
                 "Ingrese un número entero mayor que cero.");

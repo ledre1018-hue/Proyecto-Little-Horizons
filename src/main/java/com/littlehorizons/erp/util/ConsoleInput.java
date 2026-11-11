@@ -43,7 +43,7 @@ public class ConsoleInput {
                     return value;
                 }
             } catch (NumberFormatException | DateTimeParseException e) {
-                // invalid format: the same error message is shown below
+                AppLogger.getInstance().info("ConsoleInput.readValidated", "Invalid input format: '" + text + "'");
             }
             printer.printError(errorMessage);
         }

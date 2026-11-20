@@ -42,3 +42,4 @@ config.properties
 error_log.txt
 referencia/
 invoices/*.pdf
+reports/

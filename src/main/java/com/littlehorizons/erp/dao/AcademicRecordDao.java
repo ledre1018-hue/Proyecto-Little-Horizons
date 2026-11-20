@@ -1,6 +1,7 @@
 package com.littlehorizons.erp.dao;
 
 import com.littlehorizons.erp.model.AcademicRecord;
+import com.littlehorizons.erp.model.SubjectGradeRecord;
 
 import java.util.List;
 
@@ -11,4 +12,7 @@ public interface AcademicRecordDao {
     List<AcademicRecord> findByStudent(int studentId);
 
     int insert(AcademicRecord record);
+
+    /** Every grade of every student and period, with the code and name of its subject. */
+    List<SubjectGradeRecord> findAllWithSubject();
 }

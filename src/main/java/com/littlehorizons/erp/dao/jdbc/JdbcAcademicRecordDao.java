@@ -3,6 +3,7 @@ package com.littlehorizons.erp.dao.jdbc;
 import com.littlehorizons.erp.dao.AcademicRecordDao;
 import com.littlehorizons.erp.model.AcademicPeriod;
 import com.littlehorizons.erp.model.AcademicRecord;
+import com.littlehorizons.erp.model.SubjectGradeRecord;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,6 +23,9 @@ public class JdbcAcademicRecordDao extends BaseJdbcDao implements AcademicRecord
     private static final String INSERT = "INSERT INTO registros_academicos (id_estudiante, id_materia, "
             + "id_profesor, año_academico, periodo_academico, valor_nota, observaciones, fecha_registro) "
             + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String FIND_ALL_WITH_SUBJECT = "SELECT r.id_registro, r.valor_nota, r.periodo_academico, "
+            + "m.id_materia, m.codigo_materia, m.nombre_materia FROM registros_academicos r "
+            + "JOIN materias m ON m.id_materia = r.id_materia ORDER BY m.id_materia, r.id_registro";
 
     @Override
     public List<AcademicRecord> findAll() {
@@ -40,6 +44,11 @@ public class JdbcAcademicRecordDao extends BaseJdbcDao implements AcademicRecord
                 record.getRecordDate());
     }
 
+    @Override
+    public List<SubjectGradeRecord> findAllWithSubject() {
+        return queryForList(FIND_ALL_WITH_SUBJECT, resultSet -> mapSubjectGrade(resultSet));
+    }
+
     private AcademicRecord mapRecord(ResultSet resultSet) throws SQLException {
         AcademicRecord record = new AcademicRecord(resultSet.getInt("id_estudiante"), resultSet.getInt("id_materia"),
                 resultSet.getInt("id_profesor"), resultSet.getInt("año_academico"),
@@ -53,5 +62,12 @@ public class JdbcAcademicRecordDao extends BaseJdbcDao implements AcademicRecord
         record.setNotes(resultSet.getString("observaciones"));
         record.setRecordDate(getDate(resultSet, "fecha_registro"));
         return record;
+    }
+
+    private SubjectGradeRecord mapSubjectGrade(ResultSet resultSet) throws SQLException {
+        return new SubjectGradeRecord(resultSet.getInt("id_registro"), resultSet.getDouble("valor_nota"),
+                AcademicPeriod.fromDbValue(resultSet.getString("periodo_academico")),
+                resultSet.getInt("id_materia"), resultSet.getString("codigo_materia"),
+                resultSet.getString("nombre_materia"));
     }
 }

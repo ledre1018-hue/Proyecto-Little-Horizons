@@ -7,9 +7,13 @@ import com.littlehorizons.erp.dao.TeacherAssignmentDao;
 import com.littlehorizons.erp.model.AcademicPeriod;
 import com.littlehorizons.erp.model.AcademicRecord;
 import com.littlehorizons.erp.model.StudentSubjectAverage;
+import com.littlehorizons.erp.model.SubjectAverage;
+import com.littlehorizons.erp.model.SubjectGradeRecord;
 import com.littlehorizons.erp.model.TeacherAssignment;
 import com.littlehorizons.erp.util.BusinessRuleException;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -136,6 +140,45 @@ public class AcademicController {
                         .get(0))
                 .sorted(byCourseAndSubject())
                 .toList();
+    }
+
+    /**
+     * General average of every subject (all students and all periods), rounded to one decimal,
+     * from the best to the worst average. Ties are ordered by subject name, then by code
+     * (the same subject name exists in several grades).
+     */
+    public List<SubjectAverage> getSubjectPerformance() {
+        Map<SubjectKey, Double> averagesBySubject = recordDao.findAllWithSubject().stream()
+                .collect(Collectors.groupingBy(
+                        record -> new SubjectKey(record.getSubjectId(), record.getSubjectCode(),
+                                record.getSubjectName()),
+                        Collectors.averagingDouble(record -> record.getValue())));
+        return averagesBySubject.entrySet().stream()
+                .map(entry -> new SubjectAverage(entry.getKey().id(), entry.getKey().code(), entry.getKey().name(),
+                        roundToOneDecimal(entry.getValue())))
+                .sorted(Comparator.comparing((SubjectAverage average) -> average.getAverage()).reversed()
+                        .thenComparing(average -> average.getSubjectName())
+                        .thenComparing(average -> average.getSubjectCode()))
+                .toList();
+    }
+
+    /** Subjects with the highest average. Returns all of them when there is a tie, or an empty list. */
+    public List<SubjectAverage> getTopSubjects(List<SubjectAverage> averages) {
+        return averages.stream()
+                .map(average -> average.getAverage())
+                .max(Comparator.naturalOrder())
+                .map(bestAverage -> averages.stream()
+                        .filter(average -> average.getAverage().compareTo(bestAverage) == 0)
+                        .toList())
+                .orElse(List.of());
+    }
+
+    private BigDecimal roundToOneDecimal(double value) {
+        return BigDecimal.valueOf(value).setScale(1, RoundingMode.HALF_UP);
+    }
+
+    /** Grouping key of the performance report: one subject. */
+    private record SubjectKey(int id, String code, String name) {
     }
 
     private Comparator<StudentSubjectAverage> byCourseAndSubject() {
